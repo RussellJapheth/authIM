@@ -40,7 +40,7 @@ class Users {
     ) {
         let user = await User.findOne({
             where: {
-                id,
+                id: data.id,
             },
         });
 
@@ -48,23 +48,45 @@ class Users {
             throw new Error("User not foumd");
         }
 
-        if (email !== null) {
-            user.email = email;
+        if (data.email) {
+            user.email = data.email;
         }
 
-        if (password !== null) {
+        if (data.password) {
             const salt = await bcrypt.genSalt(10);
-            password = await bcrypt.hash(password, salt);
-            user.password = password;
+            data.password = await bcrypt.hash(data.password, salt);
+            user.password = data.password;
         }
 
-        if (username !== null) {
-            user.username = username;
+        if (data.username) {
+            user.username = data.username;
         }
 
         user.save({ fields: ["email", "password", "username"] });
         user.reload();
         return user;
+    }
+
+    /**
+     * Attempt signin
+     * @param {Object} data - The data of the user.
+     * @param {String} email - The email address of the user.
+     * @param {String} username - The username of the user.
+     * @returns {User|Boolean} The user or false on failure
+     */
+    static async login(email, password) {
+        let user = await User.findOne({
+            where: {
+                email,
+            },
+        });
+        if (user === null) {
+            return false;
+        }
+        // check if password id valid
+        const validPassword = await bcrypt.compare(password, user.password);
+
+        return validPassword ? user : false;
     }
 
     /**

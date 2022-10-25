@@ -4,7 +4,7 @@
     "description": "A simple nodejs authentication and authorization library",
     "main": "lib.js",
     "scripts": {
-        "test": "jest --verbose ./tests"
+        "test": "NODE_ENV=testing jest --silent ./tests"
     },
     "author": "Russell Japheth <japheth.russell.i@mail.com>",
     "license": "MIT",

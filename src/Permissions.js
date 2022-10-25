@@ -12,8 +12,8 @@ class Permissions {
      */
     static async create(data = { permissionName, description: "" }) {
         return Permission.create({
-            name: permissionName,
-            description: description,
+            name: data.permissionName,
+            description: data.description,
         });
     }
 
@@ -29,7 +29,7 @@ class Permissions {
     static async update(data = { id, permissionName, description: "" }) {
         let permission = await Permission.findOne({
             where: {
-                id,
+                id: data.id,
             },
         });
 
@@ -37,12 +37,12 @@ class Permissions {
             throw new Error("Group not foumd");
         }
 
-        if (permissionName !== null) {
-            permission.name = permissionName;
+        if (data.permissionName) {
+            permission.name = data.permissionName;
         }
 
-        if (description !== null) {
-            permission.description = description;
+        if (data.description) {
+            permission.description = data.description;
         }
 
         permission.save({ fields: ["name", "description"] });
@@ -83,6 +83,7 @@ class Permissions {
             },
         });
     }
+
     static async getAllGroups(permissionId) {
         let permission = await Permission.findOne({
             where: {
@@ -91,6 +92,7 @@ class Permissions {
         });
         return await permission.getGroups();
     }
+
     static async getAllUsers(permissionId) {
         let permission = await Permission.findOne({
             where: {
@@ -99,6 +101,7 @@ class Permissions {
         });
         return await permission.getUsers();
     }
+
     static async getAllRoles(permissionId) {
         let permission = await Permission.findOne({
             where: {
@@ -107,6 +110,7 @@ class Permissions {
         });
         return await permission.getRoles();
     }
+
     /**
      * Delete a permission by id
      * @param {Number} id - The id of the permission.

@@ -12,8 +12,8 @@ class Groups {
      */
     static async create(data = { groupName, description: "" }) {
         return Group.create({
-            name: groupName,
-            description: description,
+            name: data.groupName,
+            description: data.description,
         });
     }
 
@@ -29,7 +29,7 @@ class Groups {
     static async update(data = { id, groupName, description: "" }) {
         let group = await Group.findOne({
             where: {
-                id,
+                id: data.id,
             },
         });
 
@@ -37,12 +37,12 @@ class Groups {
             throw new Error("Group not foumd");
         }
 
-        if (groupName !== null) {
-            group.name = groupName;
+        if (data.groupName) {
+            group.name = data.groupName;
         }
 
-        if (description !== null) {
-            group.description = description;
+        if (data.description) {
+            group.description = data.description;
         }
 
         group.save({ fields: ["name", "description"] });

@@ -12,8 +12,8 @@ class Roles {
      */
     static async create(data = { roleName, description: "" }) {
         return Role.create({
-            name: roleName,
-            description: description,
+            name: data.roleName,
+            description: data.description,
         });
     }
 
@@ -37,12 +37,12 @@ class Roles {
             throw new Error("Group not foumd");
         }
 
-        if (roleName !== null) {
-            role.name = roleName;
+        if (data.roleName) {
+            role.name = data.roleName;
         }
 
-        if (description !== null) {
-            role.description = description;
+        if (data.description) {
+            role.description = data.description;
         }
 
         role.save({ fields: ["name", "description"] });
