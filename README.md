@@ -29,6 +29,9 @@ DATABASE_PASSWORD | Your mariadb password
 
 ```js
 AuthIM.init().then(() => {
+    // get all users
+    let users = await Users.findAll();
+
     // Create a new user
     let user = await Users.create({
         username: "Randell",
@@ -36,6 +39,9 @@ AuthIM.init().then(() => {
         email: "randell@example.com",
     });
     console.log(user.id);
+
+    // find a user
+    user = await Users.findById(1);
 
     // Update a user
     await Users.update({
@@ -52,7 +58,103 @@ AuthIM.init().then(() => {
         // login successful
         res.redirect('/');
     }
+
+    // check if a user has a permission
+    if(await user.hasPermission(permission)){
+        console.log("User has permission")
+    }
 });
+```
+
+### Groups
+
+```js
+// ...
+// Get all groups
+let groups = await Groups.findAll();
+
+// create a new group
+let group = await Groups.create({
+    groupName: "supervisors",
+});
+
+// find a group
+group = await Groups.findById(1);
+
+// add a permission to a group
+await Groups.addPermissionById(group.id, permission.id);
+
+// remove a permission from a group
+await Groups.removePermission(group.id, permission.id);
+
+// add a user to a group
+await Groups.addUserById(group.id, user.id);
+
+// remove a user from a group
+await Groups.removeUser(group.id, user.id);
+
+// check if a group has a permission
+if (await group.hasPermission(permission)) {
+    console.log("Group has permission");
+}
+```
+
+### Roles
+
+```js
+// ...
+// Get all roles
+let roles = Roles.findAll();
+
+// create a new role
+let role = await Roles.create({
+    roleName: "admin",
+});
+
+// find a role
+role = await Roles.findById(1);
+
+// add a permission to a role
+await Roles.addPermissionById(role.id, permission.id);
+
+// remove a permission from a role
+await Roles.removePermission(role.id, permission.id);
+
+// add a user to a role
+await Roles.addUserById(role.id, user.id);
+
+// remove a user from a role
+await Roles.removeUser(role.id, user.id);
+
+// check if a role has a permission
+if (await role.hasPermission(permission)) {
+    console.log("Role has permission");
+}
+```
+
+### Permissions
+
+```js
+// ...
+// Get all permissions
+let permissions = await Permissions.findAll();
+
+// create a new permission
+let permission = await Permissions.create({
+    permissionName: "create",
+});
+
+// find a permission
+permission = await Permissions.findById(1);
+
+// get all groups with permission
+let groups = await Permissions.getAllGroups(permission.id);
+
+// get all users with permission
+let users = await Permissions.getAllUsers(permission.id);
+
+// get all roles with permission
+let roles = await Permissions.getAllRoles(permission.id);
 ```
 
 ## API Documentation
