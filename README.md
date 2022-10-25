@@ -25,17 +25,33 @@ DATABASE_NAME | Your mariadb database name
 DATABASE_USERNAME | Your mariadb user name
 DATABASE_PASSWORD | Your mariadb password
 
-### Creating users
+### Users
 
 ```js
-
 AuthIM.init().then(() => {
+    // Create a new user
     let user = await Users.create({
         username: "Randell",
         password: "password",
         email: "randell@example.com",
     });
     console.log(user.id);
+
+    // Update a user
+    await Users.update({
+        username: "Migo",
+    });
+
+    // Attempt a login
+    let login = await Users.login(
+        "randell@example.com",
+        "password"
+    );
+
+    if(login) {
+        // login successful
+        res.redirect('/');
+    }
 });
 ```
 
@@ -53,4 +69,4 @@ _\*requires jsdoc_
 npm run test
 ```
 
-_\*for running unit tests, and in-memory sqlite database is used_
+_\*for running unit tests, an in-memory sqlite database is used_
