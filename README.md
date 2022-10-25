@@ -165,6 +165,10 @@ jsdoc -r ./src/
 
 _\*requires jsdoc_
 
+## Extending
+
+AuthIM is built on [Sequlize](https://sequelize.org/) and its methods are available on returned results.
+
 ## Tests
 
 ```bash
