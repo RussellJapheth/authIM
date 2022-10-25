@@ -1,4 +1,4 @@
-const { Permission, Group } = require("../models");
+const { Permission, User, Group } = require("../models");
 
 class Groups {
     /**
@@ -131,6 +131,56 @@ class Groups {
         }
 
         group.removePermission(permission);
+        return group;
+    }
+
+    /**
+     * Add a user to a group
+     * @param {Number} groupId - The id of the group.
+     * @param {Number} userId - The id of the user.
+     * @returns {Group} The group object
+     * @throws {Error} Group not found
+     * @throws {Error} User not found
+     */
+    static async addUserById(groupId, userId) {
+        let group = await this.findById(groupId);
+        if (group === null) {
+            throw new Error("Group not found");
+        }
+
+        let user = await User.findOne({
+            where: { id: userId },
+        });
+        if (user === null) {
+            throw new Error("User not found");
+        }
+
+        group.addUser(user);
+        return group;
+    }
+
+    /**
+     * Remove a user from a group
+     * @param {Number} groupId - The id of the group.
+     * @param {Number} userId - The id of the user.
+     * @returns {Group} The group object
+     * @throws {Error} Group not found
+     * @throws {Error} User not found
+     */
+    static async removeUser(groupId, userId) {
+        let group = await this.findById(groupId);
+        if (group === null) {
+            throw new Error("Group not found");
+        }
+
+        let user = await User.findOne({
+            where: { id: userId },
+        });
+        if (user === null) {
+            throw new Error("User not found");
+        }
+
+        group.removeUser(user);
         return group;
     }
 
